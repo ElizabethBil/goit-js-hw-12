@@ -4,61 +4,47 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/goit-js-hw-12/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>goit-js-hw-12</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Poppins&family=Raleway:wght@700&family=Roboto:wght@400;500;700&display=swap"
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css"
-    />
-    <title>/GOIT-JS-HW-12</title>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Montserrat&display=swap"
     />
     
     <script type="module" crossorigin src="/goit-js-hw-12/commonHelpers.js"></script>
     <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/vendor-89feecc5.js">
     <link rel="stylesheet" href="/goit-js-hw-12/assets/vendor-eb6030bc.css">
-    <link rel="stylesheet" href="/goit-js-hw-12/assets/index-b3d1a2ef.css">
+    <link rel="stylesheet" href="/goit-js-hw-12/assets/index-5a3bf25b.css">
   </head>
   <body>
-    <header></header>
-
-    <section>
-      <div class="search-box">
-        <form id="search-form">
-          <input
-            class="search-box-input"
-            type="text"
-            id="search-input"
-            placeholder="Search images..."
-            required
-          />
-          <button class="search-btn" type="submit">Search</button>
-        </form>
-      </div>
-
-      <div id="loader" class="loader"></div>
-
-      <div id="gallery" class="gallery">
-        <!-- <a href="images/image1.jpg" data-lightbox="gallery" data-title=""
-          ><img src="images/thumbs/thumb1.jpg" alt="" title=""
-        /></a>
-        <a
-          href="images/image2.jpg"
-          data-lightbox="gallery"
-          data-title="Beautiful Image"
-          ><img src="images/thumbs/thumb2.jpg" alt="" title="Beautiful Image"
-        /></a> -->
-      </div>
-    </section>
-
-    <footer>
-      <button id="load-more-btn" class="load-more-btn" style="display: none">
+    <header>
+      <form id="search-form">
+        <input
+          type="text"
+          name="query"
+          id="search-input"
+          placeholder="Search images..."
+        />
+        <button type="submit">Search</button>
+      </form>
+    </header>
+    <main>
+      <div id="image-gallery" class="gallery"></div>
+      <p id="spinner" class="loader spinner is-hidden">
+        Loading images, please wait...
+      </p>
+      <button
+        id="load-more"
+        type="button"
+        class="btn btn-primary button is-hidden"
+        data-action="load-more"
+      >
         Load more
       </button>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simplelightbox@2.1.2/dist/simple-lightbox.min.js"></script>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     
   </body>
 </html>
-q
