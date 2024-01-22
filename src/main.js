@@ -24,7 +24,7 @@ let currentPage = 1;
 let pageSize = 40;
 let currentQuery = "";
 let isLastPage = false;
-let pageQuntity;
+let pageQuantity;
 
 searchForm.addEventListener('submit', async event => {
   event.preventDefault();
@@ -33,35 +33,14 @@ searchForm.addEventListener('submit', async event => {
 
   currentQuery = query;
   currentPage = 1;
+  imageGallery.innerHTML = ""; // Очищення галереї перед новим пошуком
 
-  try {
-    toggleSpinner(true);
-    const data = await fetchImages();
-    pageQuntity = data.totalHits;
-    if (currentPage === Math.ceil(pageQuntity / pageSize)) {
-      loadMoreBtn.classList.add('is-hidden');
-      theEnd();
-    } else {
-      loadMoreBtn.classList.remove('is-hidden');
-    }
-    displayImages(data.hits);
-  } catch (error) {
-    showError();
-  } finally {
-    toggleSpinner(false);
-  }
+  await fetchAndDisplayImages();
 });
 
 loadMoreBtn.addEventListener('click', async () => {
   currentPage += 1;
-  console.log(currentPage);
 
-  if (currentPage === Math.ceil(pageQuntity / pageSize)) {
-    loadMoreBtn.classList.add('is-hidden');
-    theEnd();
-  } else {
-    loadMoreBtn.classList.remove('is-hidden');
-  }
   await fetchAndDisplayImages();
 });
 
@@ -80,6 +59,15 @@ async function fetchAndDisplayImages() {
   try {
     toggleSpinner(true);
     const data = await fetchImages();
+    pageQuantity = data.totalHits;
+
+    if (currentPage * pageSize >= pageQuantity) {
+      isLastPage = true;
+      loadMoreBtn.classList.add('is-hidden');
+    } else {
+      loadMoreBtn.classList.remove('is-hidden');
+    }
+
     appendImages(data.hits);
   } catch (error) {
     showError();
@@ -88,37 +76,15 @@ async function fetchAndDisplayImages() {
   }
 }
 
-function displayImages(images) {
+function appendImages(images) {
   if (images.length === 0) {
     showError();
     return;
   }
 
-  loadMoreBtn.classList.remove("is-hidden");
-  toggleSpinner(false);
-
-  const imageElements = images.map(createImageElement);
-  imageGallery.innerHTML = "";
-  imageGallery.append(...imageElements);
-
-  if (currentPage === Math.ceil(pageQuntity / pageSize)) {
-    loadMoreBtn.classList.add('is-hidden');
-  }
-
-  initializeLightbox();
-}
-
-function appendImages(images) {
-    if (images.length === 0) {
-        isLastPage = true;
-        loadMoreBtn.classList.add("is-hidden");
-        toggleSpinner(false);
-        theEnd();
-        return;
-    }
-
   const imageElements = images.map(createImageElement);
   imageGallery.append(...imageElements);
+
   initializeLightbox();
 }
 
@@ -128,24 +94,13 @@ function createImageElement(image) {
   link.setAttribute("data-lightbox", "image-gallery");
   link.innerHTML = `
     <div class="gallery-item">
-      <img src="${image.largeImageURL}" alt="${image.tags}">
+      <img src="${image.webformatURL}" alt="${image.tags}"> <!-- Використання webformatURL -->
       <div class="image-info">
         <div class="img-info-item">
           <p>Likes:</p>
           <p>${image.likes}</p>
         </div>
-        <div class="img-info-item">
-          <p>Views: </p>
-          <p>${image.views}</p>
-        </div>
-        <div class="img-info-item">
-          <p>Comments: </p>
-          <p>${image.comments}</p>
-        </div>
-        <div class="img-info-item">
-          <p>Downloads: </p>
-          <p>${image.downloads}</p>
-        </div>
+        ...
       </div>
     </div>
   `;
@@ -163,8 +118,7 @@ function initializeLightbox() {
 function theEnd() {
   iziToast.info({
     title: "Info",
-    message:
-      "There are no more images for your request.",
+    message: "There are no more images for your request."
   });
 }
 
@@ -176,7 +130,6 @@ function showError() {
   imageGallery.innerHTML = "";
   iziToast.error({
     title: "Error",
-    message:
-      "Sorry, there are no images matching your search query. Please try again!",
+    message: "Sorry, there are no images matching your search query. Please try again!"
   });
 }
